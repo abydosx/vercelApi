@@ -1,10 +1,10 @@
 const Client = require('@notionhq/client')['Client']
-console.log('Client', Client)
+
 const notion = new Client({ auth: process.env.NOTION_KEY })
 
 const databaseId = process.env.NOTION_DATABASE_ID
 
-const query = (filter = undefined, sort = undefined) => {
+exports.query = (filter = undefined, sort = undefined) => {
   return new Promise((resolve, reject) => {
     notion.databases.query({
       database_id: databaseId,
@@ -18,4 +18,41 @@ const query = (filter = undefined, sort = undefined) => {
   })
 }
 
-module.exports = query;
+exports.addItem = (item) => {
+  const newPage = {
+    EN: {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": item.en
+          }
+        },
+      ]
+    },
+    ZH: {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": item.zh
+          }
+        },
+      ]
+    },
+    More: {
+      "rich_text": [
+        {
+          "type": "text",
+          "text": {
+            "content": item.more
+          }
+        },
+      ]
+    },
+  };
+  notion.pages.create({
+    parent: { database_id: databaseId },
+    properties: newPage,
+  })
+}
