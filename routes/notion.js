@@ -1,4 +1,4 @@
-const query = require('../services/notion/index')
+const { query } = require('../services/notion/index')
 var express = require('express');
 var router = express.Router();
 
