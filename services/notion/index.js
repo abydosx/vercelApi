@@ -4,12 +4,36 @@ const notion = new Client({ auth: process.env.NOTION_KEY })
 
 const databaseId = process.env.NOTION_DATABASE_ID
 
-exports.query = (filter = undefined, sort = undefined) => {
+exports.query = (params) => {
   return new Promise((resolve, reject) => {
     notion.databases.query({
       database_id: databaseId,
-      filter,
-      sort,
+      ...params
+    }).then((res) => {
+      resolve(res)
+    }).catch((error) => {
+      reject(error)
+    })
+  })
+}
+
+exports.updateDatabase = (params) => {
+  return new Promise((resolve, reject) => {
+    notion.databases.update({
+      database_id: databaseId,
+      ...params
+    }).then((res) => {
+      resolve(res)
+    }).catch((error) => {
+      reject(error)
+    })
+  })
+}
+
+exports.updatePage = (params) => {
+  return new Promise((resolve, reject) => {
+    notion.pages.update({
+      ...params
     }).then((res) => {
       resolve(res)
     }).catch((error) => {
